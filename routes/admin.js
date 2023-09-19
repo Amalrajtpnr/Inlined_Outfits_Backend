@@ -60,25 +60,22 @@ router.post("/login", async (req, res) => {
 
 //update user
 router.put("/", async (req, res) => {
-    const user = await User.findOne({ email: req.body.email });
-    if (!user) {
-      return res.status(404).json("You can update only your account");
-    } else {
-      try {
-        const newUser = await User.findOneAndUpdate(req.body.name, {
-          $set: {
-            name: req.body.name,
-            email: req.body.email,
-            phone: req.body.phone,
-          },
-        });
-  
-        res.status(200).json("Account has been updated");
-      } catch (error) {
-        return res.status(500).json(error);
-      }
-    }
-});
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return res.status(404).json("You can update only your account");
+  } else {
+    try {
+      user.name = req.body.name;
+      user.email = req.body.email;
+      user.phone = req.body.phone;
 
+      // Save the updated user
+      await user.save();
+      res.status(200).json("Account has been updated");
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  }
+});
 
 module.exports = router;
