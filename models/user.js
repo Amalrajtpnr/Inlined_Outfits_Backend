@@ -2,12 +2,15 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
+    userId: {
+      type: String,
+      required: true,
+    },
     name: {
       type: String,
       required: true,
       min: 3,
       max: 20,
-      unique: true,
     },
 
     email: {
@@ -22,8 +25,25 @@ const userSchema = new mongoose.Schema(
       min: 6,
     },
     phone: {
-      type: String,
+      type: Number,
       min: 10,
+    },
+    addresses: {
+      type: [
+        {
+          addressId: String,
+          name: String,
+          phone: String,
+          locality: String,
+          pinCode: String,
+          address: String,
+          city: String,
+          state: String,
+          landMark: String,
+          alternateNumber: String,
+          isHomeAddress: Boolean,
+        },
+      ],
     },
   },
   { timestamps: true }

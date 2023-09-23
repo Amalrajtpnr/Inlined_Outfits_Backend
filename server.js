@@ -4,6 +4,8 @@ require("dotenv").config();
 const cors = require("cors");
 const connectDB = require("./config/db.js");
 const authRoutes = require("./routes/admin.js");
+const productRoutes=require("./routes/product.js")
+const cartRoutes=require("./routes/cart.js")
 
 
 
@@ -16,6 +18,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/product", productRoutes);
+app.use("/api/cart", cartRoutes);
+
+
 
 
 connectDB();

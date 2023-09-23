@@ -1,6 +1,7 @@
 const router = require("express").Router();
-const User = require("../models/user.js");
+const User = require("../models/User.js");
 const bcrypt = require("bcrypt");
+const { v4: uuidv4 } = require("uuid");
 
 //Register
 router.post("/", async (req, res) => {
@@ -22,6 +23,7 @@ router.post("/", async (req, res) => {
       res.status(200).json("user already exists");
     } else {
       const newUser = new User({
+        userId: uuidv4(),
         name: req.body.name,
         email: req.body.email,
         password: hashedPassword,
@@ -33,7 +35,7 @@ router.post("/", async (req, res) => {
       res.status(200).json(user);
     }
   } catch (error) {
-    res.status(200).json(error);
+    res.status(500).json(error);
   }
 });
 
@@ -77,5 +79,54 @@ router.put("/", async (req, res) => {
     }
   }
 });
+
+// Add Address
+router.post("/add/:email", async (req, res) => {
+  try {
+    const user = await User.findOne({
+      $or: [{ email: req.params.email }],
+    });
+
+    if (!user) {
+      return res.status(404).json("User doesn't exist");
+    }
+
+    // Check if all required fields are present in the request body
+    if (
+      !req.body.name ||
+      !req.body.phone ||
+      !req.body.pinCode || 
+      !req.body.address ||
+      !req.body.city ||
+      !req.body.state
+    ) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const newAddress = {
+      addressId: uuidv4(),
+      name: req.body.name,
+      phone: req.body.phone,
+      locality: req.body.locality,
+      pinCode: req.body.pinCode, 
+      address: req.body.address,
+      city: req.body.city,
+      state: req.body.state,
+      landMark: req.body.landMark,
+      alternateNumber: req.body.alternateNumber,
+    };
+
+    // Add the newAddress to the user's addresses array
+    user.addresses.push(newAddress);
+
+    // Save the updated user object
+    await user.save();
+
+    res.status(200).json(newAddress);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 
 module.exports = router;
