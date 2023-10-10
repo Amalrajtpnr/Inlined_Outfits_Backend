@@ -42,10 +42,10 @@ router.get("/products", async (req, res) => {
 });
 
 //get product by id
-router.get("/products/:id", async (req, res) => {
+router.get("/products/get", async (req, res) => {
   try {
-    const productId = req.params.id;
-    const product = await Product.findOne({ _id: productId });
+    const { id } = req.query
+    const product = await Product.findOne({ productId: id })
 
     if (product) {
       res.status(200).json(product);

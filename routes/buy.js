@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Product = require("../models/Product.js");
-const Cart = require("../models/Cart.js");
+const Buy = require("../models/Buy.js");
 const User = require("../models/user.js");
 const { v4: uuidv4 } = require("uuid");
 
@@ -11,7 +11,7 @@ router.post("/add", async (req, res) => {
 
     if (productId && email && size && color ) {
       const prod = await Product.findOne({ productId });
-      const cart = await Cart.findOne({ email });
+      const cart = await Buy.findOne({ email });
       const user = await User.findOne({ email });
 
       if (prod && cart ) {
@@ -70,45 +70,6 @@ router.post("/add", async (req, res) => {
   } catch (error) {
     res.status(500).json(error);
   }
-});
-
-//get cart
-router.get("/:email", async (req, res) => {
-  try {
-    const { email } = req.params;
-    const cart = await Cart.findOne({ email });
-    if (cart) {
-      res.status(200).json(cart);
-    } else {
-      res.status(200).json({ error: "Cart Doesnot exists" });
-    }
-  } catch (error) {}
-});
-
-//delete cart
-router.delete("/remove", async (req, res) => {
-  try {
-    const { productId, cartItemId, email, quantity } = req.body;
-    if (productId && email && cartItemId) {
-      const cart = await Cart.findOne({ email });
-      if (cart) {
-        const filtered = cart.products.filter(
-          (item) => item.cartItemId === cartItemId
-        );
-        if (filtered.length > 0 && quantity > 0) {
-          cart.products = cart.products.filter(
-            (item) => item.cartItemId !== cartItemId
-          );
-          const updated = await cart.save();
-          res.status(201).json({ cart: updated });
-        }
-      } else {
-        res.status(200).json({ error: "something went wrong!" });
-      }
-    } else {
-      res.status(200).json({ error: "Fields are missing!" });
-    }
-  } catch (error) {}
 });
 
 module.exports = router;

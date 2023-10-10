@@ -6,6 +6,8 @@ const connectDB = require("./config/db.js");
 const authRoutes = require("./routes/admin.js");
 const productRoutes=require("./routes/product.js")
 const cartRoutes=require("./routes/cart.js")
+const buyRoutes=require("./routes/buy.js")
+
 
 
 
@@ -20,6 +22,8 @@ app.use(cors());
 app.use("/api/auth", authRoutes);
 app.use("/api/product", productRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/buy", buyRoutes);
+
 
 
 
