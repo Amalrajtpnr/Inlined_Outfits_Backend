@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema(
       max: 20,
     },
 
-    email: {
+    email: {  
       type: String,
       required: true,
       max: 50,
@@ -41,7 +41,6 @@ const userSchema = new mongoose.Schema(
           state: String,
           landMark: String,
           alternateNumber: String,
-          isHomeAddress: Boolean,
         },
       ],
     },

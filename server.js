@@ -7,6 +7,7 @@ const authRoutes = require("./routes/admin.js");
 const productRoutes=require("./routes/product.js")
 const cartRoutes=require("./routes/cart.js")
 const buyRoutes=require("./routes/buy.js")
+const orderRoutes=require("./routes/order.js")
 
 
 
@@ -23,6 +24,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/product", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/buy", buyRoutes);
+app.use("/api/order", orderRoutes);
+
 
 
 
